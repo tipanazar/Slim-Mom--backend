@@ -23,7 +23,7 @@ const userSchema = Schema(
       type: String,
       required: [true, "Password is required"],
       minLength: 6,
-      maxLength: 20,
+      // maxLength: 20,
     },
     token: {
       type: String,
