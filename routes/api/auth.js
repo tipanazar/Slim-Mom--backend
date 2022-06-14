@@ -5,9 +5,8 @@ const { nanoid } = require("nanoid");
 const router = express.Router();
 
 const { User, schemas } = require("../../models/User");
-const  auth  = require("../../middlewares/auth");
+const  {auth}  = require("../../middlewares");
 const { createError } = require("../../helpers");
-const { Router } = require("express");
 
 const { SECRET_KEY } = process.env;
 
