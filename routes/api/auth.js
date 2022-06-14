@@ -148,8 +148,8 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/user", auth, async (req, res, next) => {
   try {
-    const { name } = req.user
-    res.json({ name })
+    const { name } = req.user;
+    res.json({ name });
   } catch (error) {
     next(error);
   }
@@ -159,7 +159,7 @@ router.get("/logout", auth, async (req, res, next) => {
   try {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
-    res.status(200).json()
+    res.status(200).json();
   } catch (err) {
     next();
   }
