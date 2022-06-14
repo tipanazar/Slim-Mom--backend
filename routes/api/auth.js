@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { nanoid } = require("nanoid");
-
 const router = express.Router();
 
 const { User, schemas } = require("../../models/User");
@@ -106,30 +105,63 @@ router.get("/verify", async (req, res, next) => {
 
 
 router.post("/login", async (req, res, next) => {
-  const { email, password } = req.body;
-
   try {
-    const result = await User.findOne({ email: email });
-    if (result.password !== password) {
-      return res.status(401).json({ message: "Email or password is wrong" });
+    const { error } = schemas.loginUser.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
     }
+
+    const { email, password } = req.body;
+    const result = await User.findOne({ email });
+    if (!result) {
+      throw createError(401, "Email is wrong");
+    }
+    if (!result.verify) {
+      throw createError(403, "Verify your email first!");
+    }
+    // const passwordCompare = await bcrypt.compare(password, user.password);
+    // if (!passwordCompare) {
+    //   throw createError(401, "Password is wrong");
+    // }
+    if (result.password !== password) {
+      throw createError(401, "Password is wrong");
+    }
+
     const payload = {
       id: result._id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
-    const findAndUpdate = await User.findByIdAndUpdate(result._id, {
-      token,
-    });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    await User.findByIdAndUpdate(result._id, { token });
 
+    console.log(token);
     res.status(200).json({
-      token: token,
+      token,
       user: {
-        email: findAndUpdate.email,
-        name: findAndUpdate.name
+        email: result.email,
+        name: result.name,
       },
     });
   } catch (error) {
-    res.status(404).json(error.message);
+    next(error);
+  }
+});
+
+router.get("/user", auth, async (req, res, next) => {
+  try {
+    const { name } = req.user
+    res.json({ name })
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/logout", auth, async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+    res.status(200).json()
+  } catch (err) {
+    next();
   }
 });
 
