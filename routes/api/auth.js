@@ -2,12 +2,12 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { nanoid } = require("nanoid");
-
 const router = express.Router();
 
 const { User, schemas } = require("../../models/User");
-const { auth } = require("../../middlewares");
+const  auth  = require("../../middlewares/auth");
 const { createError } = require("../../helpers");
+const { Router } = require("express");
 
 const { SECRET_KEY } = process.env;
 
@@ -46,7 +46,7 @@ router.post("/login", async (req, res, next) => {
     const payload = {
       id: result._id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
     await User.findByIdAndUpdate(result._id, { token });
 
     console.log(token);
@@ -57,6 +57,15 @@ router.post("/login", async (req, res, next) => {
         name: result.name,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/user",auth, async (req, res, next) => {
+  try {
+    const {name}=req.user
+    res.json({name})
   } catch (error) {
     next(error);
   }
