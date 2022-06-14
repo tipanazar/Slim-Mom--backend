@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
       const { id } = jwt.verify(token, SECRET_KEY);
       const user = await User.findById(id);
       if (!user || user.token !== token) {
-        throw createErr(401));
+        throw createErr(401);
       }
       req.user = user;
       next();
