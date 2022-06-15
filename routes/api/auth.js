@@ -133,10 +133,7 @@ router.post("/login", async (req, res, next) => {
     console.log(token);
     res.status(200).json({
       token,
-      user: {
-        email: result.email,
         name: result.name,
-      },
     });
   } catch (error) {
     next(error);
