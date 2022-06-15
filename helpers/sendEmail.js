@@ -3,6 +3,14 @@ require("dotenv").config();
 
 const { SENDGRID_API_KEY } = process.env;
 
+const msg = (email, verificationToken) => {
+  return {
+    to: email,
+    subject: "Підтвердження реєстрації",
+    html: `<a target="_blank" href="http://localhost:4000/api/auth/verify/${verificationToken}">НАТИСНІТЬ ДЛЯ ПІДТВЕРДЖЕННЯ ВАШОЇ ЕЛЕКТРОННОЇ АДРЕСИ </a>`,
+  };
+};
+
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 const sendEmail = (msg) => {
@@ -17,4 +25,7 @@ const sendEmail = (msg) => {
     });
 };
 
-module.exports = sendEmail;
+module.exports = {
+  msg,
+  sendEmail
+};
