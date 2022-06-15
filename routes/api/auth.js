@@ -6,31 +6,23 @@ const router = express.Router();
 
 const { User, schemas } = require("../../models/User");
 const { auth } = require("../../middlewares");
-const { createError, sendEmail } = require("../../helpers");
+const { createError, sendEmail, msg } = require("../../helpers");
 
 const { SECRET_KEY } = process.env;
 
-const msg = (email, verificationToken) => {
-  return {
-    to: email,
-    subject: "Підтвердження реєстрації",
-    html: `<a target="_blank" href="http://localhost:4000/api/auth/verify/${verificationToken}">НАТИСНІТЬ ДЛЯ ПІДТВЕРДЖЕННЯ ВАШОЇ ЕЛЕКТРОННОЇ АДРЕСИ </a>`,
-  };
-};
 
 router.post("/register", async (req, res, next) => {
   try {
     const { error } = schemas.addUser.validate(req.body);
     if (error) {
       throw error;
-    }
-
+    };
     const { name, email, password } = req.body;
-    // console.log(password.length)
+    
     const user = await User.findOne({ email });
     if (user) {
       throw createError(409, `Електронна пошта ${email} вже використовується`);
-    }
+    };
 
     const hashPass = await bcrypt.hash(password, 10);
     const verificationToken = nanoid();
@@ -44,12 +36,10 @@ router.post("/register", async (req, res, next) => {
 
     await sendEmail(msg(email, verificationToken));
 
-    res.status(201).json({
-      user: {
-        name: result.name,
-        email: result.email,
-      },
+    res.status(201).json({      
+        name: result.name      
     });
+
   } catch (error) {
     next(error);
   }
