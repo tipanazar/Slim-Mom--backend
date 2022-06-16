@@ -17,12 +17,13 @@ app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Not Found" });
 });
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ message: err.message });
+  err.status
+    ? res.status(err.status).json({ message: err.message })
+    : res.status(500).json({ message: "Server Error" });
 });
 
 module.exports = app;

@@ -10,19 +10,18 @@ const { createError, sendEmail, msg } = require("../../helpers");
 
 const { SECRET_KEY } = process.env;
 
-
 router.post("/register", async (req, res, next) => {
   try {
     const { error } = schemas.addUser.validate(req.body);
     if (error) {
-      throw error;
-    };
+      throw createError(400, error.message);
+    }
     const { name, email, password } = req.body;
-    
+
     const user = await User.findOne({ email });
     if (user) {
       throw createError(409, `Електронна пошта ${email} вже використовується`);
-    };
+    }
 
     const hashPass = await bcrypt.hash(password, 10);
     const verificationToken = nanoid();
@@ -36,10 +35,9 @@ router.post("/register", async (req, res, next) => {
 
     await sendEmail(msg(email, verificationToken));
 
-    res.status(201).json({      
-        name: result.name      
+    res.status(201).json({
+      name: result.name,
     });
-
   } catch (error) {
     next(error);
   }
@@ -95,11 +93,10 @@ router.post("/login", async (req, res, next) => {
   try {
     const { error } = schemas.loginUser.validate(req.body);
     if (error) {
-      const errorMessage=error.message.split(" ")[0]
-      
-      if(errorMessage===`"password"`)
-      {
-        throw createError(400, error.message)
+      const errorMessage = error.message.split(" ")[0];
+
+      if (errorMessage === `"password"`) {
+        throw createError(400, error.message);
       }
       throw createError(400, "Use Valid Email");
     }
@@ -129,7 +126,7 @@ router.post("/login", async (req, res, next) => {
     console.log(token);
     res.status(200).json({
       token,
-        name: result.name,
+      name: result.name,
     });
   } catch (error) {
     next(error);
