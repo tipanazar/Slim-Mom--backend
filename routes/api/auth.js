@@ -95,7 +95,13 @@ router.post("/login", async (req, res, next) => {
   try {
     const { error } = schemas.loginUser.validate(req.body);
     if (error) {
-      throw createError(400, error.message);
+      const errorMessage=error.message.split(" ")[0]
+      
+      if(errorMessage===`"password"`)
+      {
+        throw createError(400, error.message)
+      }
+      throw createError(400, "Use Valid Email");
     }
 
     const { email, password } = req.body;
@@ -123,10 +129,7 @@ router.post("/login", async (req, res, next) => {
     console.log(token);
     res.status(200).json({
       token,
-      user: {
-        email: result.email,
         name: result.name,
-      },
     });
   } catch (error) {
     next(error);
