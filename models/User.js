@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const nameRegexp = /[а-яієїґ\']+/;
+const nameRegexp = /^[а-яА-ЯёЁєЄґҐїЇіІ'a-zA-Z]+$/;
 
 const userSchema = Schema(
   {
