@@ -11,7 +11,7 @@ const msg = (email, verificationToken) => {
   };
 };
 
-sgMail.setApiKey(SENDGRID_API_KEY.process.env);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendEmail = (msg) => {
   const email = { ...msg, from: "slim.mom.server@gmail.com" };
