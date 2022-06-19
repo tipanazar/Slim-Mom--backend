@@ -20,7 +20,10 @@ router.post("/register", async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (user) {
-      throw createError(409, `Користувач з електронною поштою ${email} вже існує`);
+      throw createError(
+        409,
+        `Користувач з електронною поштою ${email} вже існує`
+      );
     }
 
     const hashPass = await bcrypt.hash(password, 10);
@@ -49,7 +52,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
     console.log(verificationToken);
     const user = await User.findOne({ verificationToken });
     if (!user) {
-      throw createError(404);
+      throw createError(404, "Не знайдено, можливо ви вже верифікували Email");
     }
     await User.findByIdAndUpdate(user._id, {
       verificationToken: null,
@@ -106,21 +109,19 @@ router.post("/login", async (req, res, next) => {
     if (!result) {
       throw createError(401, "Користувача з таким Email не знайдено");
     }
-    if (!result.verify) {
-      throw createError(403, "Верифікуйте ваш Email");
-    }
     const passwordCompare = await bcrypt.compare(password, result.password);
     if (!passwordCompare) {
       throw createError(401, "Неправильний пароль");
     }
-
+    if (!result.verify) {
+      throw createError(403, "Верифікуйте ваш Email");
+    }
     const payload = {
       id: result._id,
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
     await User.findByIdAndUpdate(result._id, { token });
 
-    console.log(token);
     res.status(200).json({
       token,
       name: result.name,
