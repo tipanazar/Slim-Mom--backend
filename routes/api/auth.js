@@ -142,7 +142,6 @@ router.post("/login", async (req, res, next) => {
       token,
         name: result.name,
         verify:result.verify,
-        verificationToken:result.verificationToken,
     });
   } catch (error) {
     next(error);
