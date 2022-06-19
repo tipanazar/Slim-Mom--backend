@@ -63,7 +63,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
   }
 });
 
-router.get("/verify", async (req, res, next) => {
+router.post("/verify", async (req, res, next) => {
   try {
     const { error } = schemas.emailValidation.validate(req.body);
     if (error) {
@@ -124,6 +124,7 @@ router.post("/login", async (req, res, next) => {
     res.status(200).json({
       token,
       name: result.name,
+      verify: result.verify,
     });
   } catch (error) {
     next(error);
