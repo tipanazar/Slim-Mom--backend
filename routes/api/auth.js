@@ -63,16 +63,16 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
   }
 });
 
-router.get("/verify", async (req, res, next) => {
+router.post("/verify", async (req, res, next) => {
   try {
     const { error } = schemas.emailValidation.validate(req.body);
     if (error) {
-      throw createError(400, "Відсутня адреса електронної пошти");
+      throw createError(400, "Введіть валідний Email");
     }
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      throw createError(400);
+      throw createError(404, "Такого Email не знайдено");
     }
     if (user.verify) {
       throw createError(400, "Електронна пошта вже перевірена");
@@ -82,7 +82,7 @@ router.get("/verify", async (req, res, next) => {
     await sendEmail(msg(email, verificationToken));
 
     res.status(200).json({
-      message: "Повідомлення для підтвердження електронної пошти відправлено",
+      message: "Лист з підтвердженням електронної пошти відправлено",
     });
   } catch (error) {
     next(error);
@@ -95,7 +95,7 @@ router.post("/login", async (req, res, next) => {
     if (error) {
       const errorMessage = error.message.split(" ")[0];
 
-      if (errorMessage === `"password"`) {
+      if (errorMessage === "password") {
         throw createError(400, error.message);
       }
       throw createError(400, "Use Valid Email");
@@ -109,11 +109,8 @@ router.post("/login", async (req, res, next) => {
     if (!result.verify) {
       throw createError(403, "Verify your email first!");
     }
-    // const passwordCompare = await bcrypt.compare(password, user.password);
-    // if (!passwordCompare) {
-    //   throw createError(401, "Password is wrong");
-    // }
-    if (result.password !== password) {
+    const passwordCompare = await bcrypt.compare(password, result.password);
+    if (!passwordCompare) {
       throw createError(401, "Password is wrong");
     }
 
@@ -127,6 +124,7 @@ router.post("/login", async (req, res, next) => {
     res.status(200).json({
       token,
       name: result.name,
+      verify: result.verify,
     });
   } catch (error) {
     next(error);
