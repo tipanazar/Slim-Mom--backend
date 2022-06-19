@@ -75,7 +75,8 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
   }
 });
 
-router.get("/verify", async (req, res, next) => {
+router.post("/verify", async (req, res, next) => {
+  console.log(req.body);
   try {
     const { error } = schemas.emailValidation.validate(req.body);
     if (error) {
@@ -97,6 +98,7 @@ router.get("/verify", async (req, res, next) => {
       message: "Повідомлення для підтвердження електронної пошти відправлено",
     });
   } catch (error) {
+    console.log(error.message);
     next(error);
   }
 });
@@ -119,9 +121,9 @@ router.post("/login", async (req, res, next) => {
     if (!result) {
       throw createError(401, "Email is wrong");
     }
-    if (!result.verify) {
-      throw createError(403, "Verify your email first!");
-    }
+    // if (!result.verify) {
+    //   throw createError(403, "Verify your email first!");
+    // }
     // const passwordCompare = await bcrypt.compare(password, user.password);
     // if (!passwordCompare) {
     //   throw createError(401, "Password is wrong");
@@ -136,10 +138,11 @@ router.post("/login", async (req, res, next) => {
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
     await User.findByIdAndUpdate(result._id, { token });
 
-    console.log(token);
     res.status(200).json({
       token,
         name: result.name,
+        verify:result.verify,
+        verificationToken:result.verificationToken,
     });
   } catch (error) {
     next(error);
