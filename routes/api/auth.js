@@ -52,7 +52,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
     console.log(verificationToken);
     const user = await User.findOne({ verificationToken });
     if (!user) {
-      throw createError(404);
+      throw createError(404, "Не знайдено, можливо ви вже верифікували Email");
     }
     await User.findByIdAndUpdate(user._id, {
       verificationToken: null,
