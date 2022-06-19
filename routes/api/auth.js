@@ -20,7 +20,7 @@ router.post("/register", async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (user) {
-      throw createError(409, `Електронна пошта ${email} вже використовується`);
+      throw createError(409, `Користувач з електронною поштою ${email} вже існує`);
     }
 
     const hashPass = await bcrypt.hash(password, 10);
@@ -98,20 +98,20 @@ router.post("/login", async (req, res, next) => {
       if (errorMessage === "password") {
         throw createError(400, error.message);
       }
-      throw createError(400, "Use Valid Email");
+      throw createError(400, "Використовуйте валідний Email");
     }
 
     const { email, password } = req.body;
     const result = await User.findOne({ email });
     if (!result) {
-      throw createError(401, "Email is wrong");
+      throw createError(401, "Користувача з таким Email не знайдено");
     }
     if (!result.verify) {
-      throw createError(403, "Verify your email first!");
+      throw createError(403, "Верифікуйте ваш Email");
     }
     const passwordCompare = await bcrypt.compare(password, result.password);
     if (!passwordCompare) {
-      throw createError(401, "Password is wrong");
+      throw createError(401, "Неправильний пароль");
     }
 
     const payload = {
