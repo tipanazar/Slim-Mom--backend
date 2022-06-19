@@ -67,12 +67,12 @@ router.get("/verify", async (req, res, next) => {
   try {
     const { error } = schemas.emailValidation.validate(req.body);
     if (error) {
-      throw createError(400, "Відсутня адреса електронної пошти");
+      throw createError(400, "Введіть валідний Email");
     }
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      throw createError(400);
+      throw createError(404, "Такого Email не знайдено");
     }
     if (user.verify) {
       throw createError(400, "Електронна пошта вже перевірена");
@@ -82,7 +82,7 @@ router.get("/verify", async (req, res, next) => {
     await sendEmail(msg(email, verificationToken));
 
     res.status(200).json({
-      message: "Повідомлення для підтвердження електронної пошти відправлено",
+      message: "Лист з підтвердженням електронної пошти відправлено",
     });
   } catch (error) {
     next(error);
