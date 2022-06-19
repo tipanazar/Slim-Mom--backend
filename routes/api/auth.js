@@ -81,9 +81,10 @@ router.post("/verify", async (req, res, next) => {
     const { verificationToken } = user;
     await sendEmail(msg(email, verificationToken));
 
-    res.status(200).json({
-      message: "Лист з підтвердженням електронної пошти відправлено",
-    });
+    // res.status(200).json({
+    //   message: "Лист з підтвердженням електронної пошти відправлено",
+    // });
+    res.status(200);
   } catch (error) {
     next(error);
   }
@@ -95,7 +96,7 @@ router.post("/login", async (req, res, next) => {
     if (error) {
       const errorMessage = error.message.split(" ")[0];
 
-      if (errorMessage === `"password"`) {
+      if (errorMessage === "password") {
         throw createError(400, error.message);
       }
       throw createError(400, "Use Valid Email");
