@@ -20,7 +20,7 @@ router.post("/register", async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (user) {
-      throw createError(409, `Електронна пошта ${email} вже використовується`);
+      throw createError(409, `Користувач з електронною поштою ${email} вже існує`);
     }
 
     const hashPass = await bcrypt.hash(password, 10);
