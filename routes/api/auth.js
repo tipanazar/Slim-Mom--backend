@@ -109,11 +109,8 @@ router.post("/login", async (req, res, next) => {
     if (!result.verify) {
       throw createError(403, "Verify your email first!");
     }
-    // const passwordCompare = await bcrypt.compare(password, user.password);
-    // if (!passwordCompare) {
-    //   throw createError(401, "Password is wrong");
-    // }
-    if (result.password !== password) {
+    const passwordCompare = await bcrypt.compare(password, result.password);
+    if (!passwordCompare) {
       throw createError(401, "Password is wrong");
     }
 
