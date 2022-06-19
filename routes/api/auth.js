@@ -81,10 +81,9 @@ router.post("/verify", async (req, res, next) => {
     const { verificationToken } = user;
     await sendEmail(msg(email, verificationToken));
 
-    // res.status(200).json({
-    //   message: "Лист з підтвердженням електронної пошти відправлено",
-    // });
-    res.status(200);
+    res.status(200).json({
+      message: "Лист з підтвердженням електронної пошти відправлено",
+    });
   } catch (error) {
     next(error);
   }
