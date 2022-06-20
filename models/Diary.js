@@ -2,19 +2,18 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const productSchema = Schema({
-    productId: {type: mongoose.Schema.Types.ObjectId, ref: "products"},
-    weight:{
-        type: Number,
-        default: 100
-    }
-
-})
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+  weight: {
+    type: Number,
+    default: 100,
+  },
+});
 
 const diarySchema = Schema({
   productList: [productSchema],
   date: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
   caloriesReceived: {
     type: Number,
@@ -27,20 +26,21 @@ const diarySchema = Schema({
 });
 
 const schemaAdd = Joi.object({
-    product: Joi.string().required(),
-    date: Joi.date().required(),    
-    owner: Joi.string().required(),
+  productId: Joi.string().required(),
+  weight: Joi.number().required(),
+  date: Joi.date().required(),
+  owner: Joi.string().required(),
 });
 
 const schemaDelete = Joi.object({
-    product: Joi.string().required(),
-    date: Joi.date().required(),    
-    owner: Joi.string().required(),
+  id: Joi.string().required(),
+  date: Joi.date().required(),
+  owner: Joi.string().required(),
 });
 
 const schemas = {
   add: schemaAdd,
-  delete: schemaDelete,  
+  delete: schemaDelete,
 };
 
 const Diary = model("diary", diarySchema);
