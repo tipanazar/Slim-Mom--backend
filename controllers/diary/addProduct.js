@@ -1,29 +1,44 @@
-const Diary = require("../../models/Diary");
+const { Types } = require("mongoose");
+const { Diary } = require("../../models/Diary");
+const { Product } = require("../../models/Product");
 const updateDiaryInfo = require("./updateDiaryInfo");
+const { createError } = require("../../helpers");
 
 const addProduct = async (req, res, next) => {
-    console.log("Start")
   try {
     const owner = req.user._id;
-    const { date, productId, weight } = req.body;
-console.log(owner)
+    const { date } = req.body;
+    const productId = req.body.productId.toString();
+    const weight = Number(req.body.weight) ?? 100;
     let productList = [];
     const diaryInfo = await Diary.findOne({ date, owner });
+
     if (!diaryInfo) {
-      throw createError(404);
-    }
-    productList = diaryInfo.productList;
-
-    const indexProduct = productList.find((el) => el.productId === productId);
-    if ((indexProduct = -1)) {
-      productList = [...productList, { productId, weight }];
+      const result = await updateDiaryInfo({
+        owner,
+        date,
+        productList: [{ productId, weight }],
+      });
+      res.status(201).json(result);
     } else {
-      productList[indexProduct].weight += weight;
-    }
+      productList = diaryInfo?.productList ?? [];
+      console.log(productList);
+      const indexProduct = productList.findIndex((el) =>
+        el.productId.toString() === productId.toString()
+      );
+      console.log(indexProduct);
+      if (indexProduct === -1) {
+        productList = [...productList, { productId, weight }];
+      } else {
+        productList[indexProduct].weight =
+          productList[indexProduct].weight + weight ?? weight;
+      }
 
-    const result = await updateDiaryInfo({ owner, date, productList });
-    res.status(201).json(result);
+      const result = await updateDiaryInfo({ owner, date, productList });
+      res.status(201).json(result);
+    }
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

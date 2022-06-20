@@ -6,7 +6,7 @@ const searchProducts = async (req, res, next) => {
     const searchQuerry = new RegExp(req.params.searchQuerry, 'gi');
     
     const result = await Product.find().or({ "title.ru":  {   $regex: searchQuerry}}, { "title.ua":  {   $regex: searchQuerry}} ) ;
-      console.log(result)
+      
     if (!result) {
       throw createError(404);
     }

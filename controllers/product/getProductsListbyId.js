@@ -3,13 +3,14 @@ const { createError } = require("../../helpers");
 
 const getProductsListbyId = async (productListId=[]) => {
   try {      
-    const result = await Product.limit(50).find({ _id:{$in:productListId}});
+    const result = await Product.find({ _id:{$in:productListId}});
+    console.log(result)
     if (!result) {
       throw createError(404);
     }
-    res.json(result);
+    return result;
   } catch (error) {
-    next(error);
+    throw createError(404);
   }
 };
 

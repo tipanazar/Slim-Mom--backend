@@ -14,8 +14,8 @@ const productSchema = Schema({
 const diarySchema = Schema({
   productList: [productSchema],
   date: {
-    type: Date,
-    default: new Date(),
+    type: String,
+    require: [true, "Date is required"]
   },
   caloriesReceived: {
     type: Number,
@@ -30,13 +30,12 @@ const diarySchema = Schema({
 const schemaAdd = Joi.object({
   productId: Joi.string().required(),
   weight: Joi.number().required(),
-  date: Joi.date().required(),
-  owner: Joi.string().required(),
+  date: Joi.string().required(),  
 });
 
 const schemaDelete = Joi.object({
   id: Joi.string().required(),
-  date: Joi.date().required(),
+  date: Joi.string().required(),
   owner: Joi.string().required(),
 });
 
