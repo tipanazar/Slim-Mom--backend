@@ -100,7 +100,10 @@ router.post("/login", async (req, res, next) => {
       console.log(errorMessage);
       console.log(error.message);
       if (errorMessage === '"password"') {
-        throw createError(400, "Пароль має складати шість, або більше символів");
+        throw createError(
+          400,
+          "Пароль має складати шість, або більше символів"
+        );
       }
       throw createError(400, "Використовуйте валідний Email");
     }
