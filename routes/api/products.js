@@ -8,8 +8,8 @@ const ctrl = require("../../controllers/product");
 
 const router = express.Router();
 
-router.get("/:searchQuerry", ctrl.searchProducts);
+router.get("/search/:searchQuerry", ctrl.searchProducts);
 
-router.get("/:groupBlood", ctrl.getNotAllowedProducts);
+router.get("/allowed/:groupBlood", ctrl.getNotAllowedProducts);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const productSchema = Schema({
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+  productId: { type: Schema.Types.ObjectId, ref: "products" },
   weight: {
     type: Number,
     default: 100,
