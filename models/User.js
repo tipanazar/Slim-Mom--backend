@@ -1,14 +1,15 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-// eslint-disable-next-line
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const nameRegexp = /^[а-яА-ЯёЁєЄґҐїЇіІ' a-zA-Z]+$/;
 
 const userSchema = Schema(
   {
     name: {
       type: String,
       required: [true, "Name is required"],
+      match: nameRegexp,
       minLength: 2,
       maxLength: 16,
     },
@@ -23,7 +24,6 @@ const userSchema = Schema(
       type: String,
       required: [true, "Password is required"],
       minLength: 6,
-      maxLength: 20,
     },
     token: {
       type: String,
@@ -43,7 +43,7 @@ const userSchema = Schema(
 
 const addUserSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  name: Joi.string().alphanum().min(2).max(16).required(),
+  name: Joi.string().pattern(nameRegexp).min(2).max(16).required(),
   password: Joi.string().min(6).max(20).required(),
 });
 
