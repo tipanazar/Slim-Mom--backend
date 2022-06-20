@@ -2,10 +2,11 @@ const Diary = require("../../models/Diary");
 const updateDiaryInfo = require("./updateDiaryInfo");
 
 const addProduct = async (req, res, next) => {
+    console.log("Start")
   try {
     const owner = req.user._id;
     const { date, productId, weight } = req.body;
-
+console.log(owner)
     let productList = [];
     const diaryInfo = await Diary.findOne({ date, owner });
     if (!diaryInfo) {

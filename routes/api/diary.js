@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.get("/:date", ctrl.getDiaryInfo);
 
-router.patch("/add/", validation(schemas.add), ctrl.addProduct);
+router.patch("/add/", auth, validation(schemas.add), ctrl.addProduct);
 
-router.patch("/delete/", validation(schemas.delete), ctrl.deleteProduct);
+router.patch("/delete/", auth, validation(schemas.delete), ctrl.deleteProduct);
 
 module.exports = router;
