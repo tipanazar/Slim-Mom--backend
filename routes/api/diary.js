@@ -2,7 +2,7 @@ const express = require("express");
 
 const { schemas } = require("../../models/Diary");
 
-const { validation } = require("../../middlewares");
+const { validation, auth } = require("../../middlewares");
 
 const ctrl = require("../../controllers/diary");
 
