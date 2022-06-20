@@ -3,13 +3,10 @@ const { createError } = require("../../helpers");
 
 const searchProducts = async (req, res, next) => {
   try {
-    const searchQuerry = req.params.searchQuerry;
-    console.log(searchQuerry)
-    const result = await Product.find().or(
-        { title: { ua: { $text: /.*searchQuerry/  } } },
-        { title: { ru: {  $text: /.*searchQuerry/ } } }
-      )
-      ;
+    const searchQuerry = new RegExp(req.params.searchQuerry, 'gi');
+    
+    const result = await Product.find().or({ "title.ru":  {   $regex: searchQuerry}}, { "title.ua":  {   $regex: searchQuerry}} ) ;
+      
     if (!result) {
       throw createError(404);
     }

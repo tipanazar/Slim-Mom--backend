@@ -7,9 +7,14 @@ const productSchema = Schema({
   weight: {
     type: Number,
   },
-  title: {
-    type: Object,
-  },
+  title: Schema({
+    ru: {type : String,
+        index: true
+    },
+    ua: {type : String,
+        index: true
+    }
+  }),
   calories: {
     type: Number,
   },

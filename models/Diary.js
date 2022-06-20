@@ -9,6 +9,8 @@ const productSchema = Schema({
   },
 });
 
+
+
 const diarySchema = Schema({
   productList: [productSchema],
   date: {

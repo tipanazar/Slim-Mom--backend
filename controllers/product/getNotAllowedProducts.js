@@ -8,9 +8,9 @@ const getNotAllowedProducts = async (req, res, next) => {
     if (!([1,2,3,4].find(el=>el == groupBlood))){        
         throw createError(404);
     }
-    console.dir("Go")
-    const result = await Product.find({ calories :  { $eq: 342 }  }); //
-     console.log("Go")
+    
+    const result = await Product.find({groupBloodNotAllowed: { $in: [true] }}); //
+    
     if (!result) {
       throw createError(404);
     }
