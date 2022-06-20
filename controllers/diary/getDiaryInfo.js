@@ -1,11 +1,11 @@
 const Diary = require("../../models/Diary");
 const { createError } = require("../../helpers");
 
-const getContactById = async (req, res, next) => {
+const getDiaryInfo = async (req, res, next) => {
   try {
-    const _id = req.params.id;
+    const date = req.params.date;
     const owner = req.user._id;
-    const result = await Contact.findOne({ _id, owner });
+    const result = await Diary.findOne({ date, owner });
     if (!result) {
       throw createError(404);
     }
@@ -15,4 +15,4 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-module.exports = getContactById;
+module.exports = getDiaryInfo;

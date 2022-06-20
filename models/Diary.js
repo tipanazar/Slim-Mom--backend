@@ -1,8 +1,17 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const productSchema = Schema({
+    productId: {type: mongoose.Schema.Types.ObjectId, ref: "products"},
+    weight:{
+        type: Number,
+        default: 100
+    }
+
+})
+
 const diarySchema = Schema({
-  productList: [{ type: mongoose.Schema.Types.ObjectId, ref: "products" }],
+  productList: [productSchema],
   date: {
     type: Date,
     default: new Date()
