@@ -78,7 +78,7 @@ router.post("/verify", async (req, res, next) => {
       throw createError(404, "Такого Email не знайдено");
     }
     if (user.verify) {
-      throw createError(400, "Електронна пошта вже перевірена");
+      throw createError(409, "Електронна пошта вже перевірена");
     }
 
     const { verificationToken } = user;
