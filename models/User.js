@@ -40,6 +40,10 @@ const userSchema = Schema(
         "calories": "0"
     }
     },
+    notAllowedProducts:{
+      type: Array,
+      default: []
+    },
     verify: {
       type: Boolean,
       default: false,
