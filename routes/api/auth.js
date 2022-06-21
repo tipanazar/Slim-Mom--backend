@@ -111,7 +111,7 @@ router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     const result = await User.findOne({ email });
     if (!result) {
-      throw createError(401, "Користувача з таким Email не знайдено");
+      throw createError(404, "Користувача з таким Email не знайдено");
     }
     const passwordCompare = await bcrypt.compare(password, result.password);
     if (!passwordCompare) {
