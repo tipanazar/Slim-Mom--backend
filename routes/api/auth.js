@@ -97,9 +97,13 @@ router.post("/login", async (req, res, next) => {
     const { error } = schemas.loginUser.validate(req.body);
     if (error) {
       const errorMessage = error.message.split(" ")[0];
-
-      if (errorMessage === "password") {
-        throw createError(400, error.message);
+      console.log(errorMessage);
+      console.log(error.message);
+      if (errorMessage === '"password"') {
+        throw createError(
+          400,
+          "Пароль має складати шість, або більше символів"
+        );
       }
       throw createError(400, "Використовуйте валідний Email");
     }

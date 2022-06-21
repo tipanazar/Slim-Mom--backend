@@ -58,7 +58,35 @@ router.post('/user/bloodtype/:bloodType', auth, async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
+    const { bloodType } = req.params;
+    const { _id } = req.user;
+    const products = await (
+      await Product.find({}, "-__v ")
+    ).filter((item) => item.groupBloodNotAllowed[bloodType] === true);
+    if (!products) {
+      throw createError(404);
+    }
+    const calories = calculateCalories(req.body);
+    const parameters = {
+      ...req.body,
+      calories,
+    };
+    const result = await User.findByIdAndUpdate(
+      _id,
+      { parameters },
+      { new: true }
+    );
+    if (!result) {
+      createError(404);
+    }
+    const response = {
+      products: [...products].splice(0, 10),
+      calories,
+    };
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
-
