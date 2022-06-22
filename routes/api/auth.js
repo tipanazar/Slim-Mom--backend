@@ -130,6 +130,8 @@ router.post("/login", async (req, res, next) => {
       token,
       name: result.name,
       verify: result.verify,
+      notAllowedProducts: result.notAllowedProducts, 
+      parameters: result.parameters
     });
   } catch (error) {
     next(error);
