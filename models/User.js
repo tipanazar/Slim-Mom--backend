@@ -29,6 +29,21 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    parameters: {
+      type: Object,
+      default: {
+        "age": "0",
+        "height": "0",
+        "currentWeight": "0",
+        "desiredWeight": "0",
+        "bloodType": "1",
+        "calories": "0"
+    }
+    },
+    notAllowedProducts:{
+      type: Array,
+      default: []
+    },
     verify: {
       type: Boolean,
       default: false,

@@ -10,7 +10,7 @@ const auth = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      throw createError(403, "Token is required");
+      throw createError(401, "Token is required");
     }
     const [bearer, token] = authorization.split(" ");
     if (bearer !== "Bearer") {

@@ -78,7 +78,7 @@ router.post("/verify", async (req, res, next) => {
       throw createError(404, "Такого Email не знайдено");
     }
     if (user.verify) {
-      throw createError(400, "Електронна пошта вже перевірена");
+      throw createError(409, "Електронна пошта вже перевірена");
     }
 
     const { verificationToken } = user;
@@ -97,9 +97,13 @@ router.post("/login", async (req, res, next) => {
     const { error } = schemas.loginUser.validate(req.body);
     if (error) {
       const errorMessage = error.message.split(" ")[0];
-
-      if (errorMessage === "password") {
-        throw createError(400, error.message);
+      console.log(errorMessage);
+      console.log(error.message);
+      if (errorMessage === '"password"') {
+        throw createError(
+          400,
+          "Пароль має складати шість, або більше символів"
+        );
       }
       throw createError(400, "Використовуйте валідний Email");
     }
@@ -107,7 +111,7 @@ router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     const result = await User.findOne({ email });
     if (!result) {
-      throw createError(401, "Користувача з таким Email не знайдено");
+      throw createError(404, "Користувача з таким Email не знайдено");
     }
     const passwordCompare = await bcrypt.compare(password, result.password);
     if (!passwordCompare) {
