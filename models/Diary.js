@@ -2,8 +2,15 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const productSchema = Schema({
-  productId: { type: Schema.Types.ObjectId, ref: "products" },
+  _id: { type: Schema.Types.ObjectId, ref: "products" },
   weight: {
+    type: Number,
+    default: 100,
+  },
+  title: {
+    type: String,  
+  },
+  calories: {
     type: Number,
     default: 100,
   },
@@ -31,12 +38,14 @@ const schemaAdd = Joi.object({
   productId: Joi.string().required(),
   weight: Joi.number().required(),
   date: Joi.string().required(),  
+  title: Joi.string(),
+  caloriesBasic: Joi.number()
 });
 
 const schemaDelete = Joi.object({
-  id: Joi.string().required(),
+  _id: Joi.string().required(),
   date: Joi.string().required(),
-  owner: Joi.string().required(),
+  owner: Joi.string(),
 });
 
 const schemas = {

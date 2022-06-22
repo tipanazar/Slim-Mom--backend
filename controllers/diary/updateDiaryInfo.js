@@ -8,14 +8,13 @@ const updateDiaryInfo = async ({ owner, date, productList = [] }) => {
 
     if (productList?.length) {
       const productFullInfoList = await getProductsListbyId(
-        productList.map(({ productId }) => productId)
-      );
-      console.log("fr")
+        productList.map(({ _id }) => _id)
+      );     
       if (productFullInfoList?.length) {
         for (let index = 0; index < productFullInfoList.length; index++) {
           const weight =
             productList.find(
-              ({productId }) => productId.toString() === productFullInfoList[index]._id.toString() 
+              ({_id }) => _id.toString() === productFullInfoList[index]._id.toString() 
             )?.weight ?? 0;
 
           const caloriesCalc = Math.round(

@@ -8,7 +8,7 @@ const ctrl = require("../../controllers/diary");
 
 const router = express.Router();
 
-router.get("/:date", ctrl.getDiaryInfo);
+router.get("/:date",auth, ctrl.getDiaryInfo);
 
 router.patch("/add/", auth, validation(schemas.add), ctrl.addProduct);
 

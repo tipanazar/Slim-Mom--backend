@@ -4,7 +4,7 @@ const { createError } = require("../../helpers");
 const getProductsListbyId = async (productListId=[]) => {
   try {      
     const result = await Product.find({ _id:{$in:productListId}});
-    console.log(result)
+    
     if (!result) {
       throw createError(404);
     }

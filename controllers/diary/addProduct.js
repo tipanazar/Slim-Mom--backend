@@ -7,31 +7,33 @@ const { createError } = require("../../helpers");
 const addProduct = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const { date } = req.body;
-    const productId = req.body.productId.toString();
+    const { date, title, caloriesBasic } = req.body;
+    const _id = req.body.productId;
     const weight = Number(req.body.weight) ?? 100;
     let productList = [];
     const diaryInfo = await Diary.findOne({ date, owner });
 
     if (!diaryInfo) {
+        const calories = Math.round(weight*caloriesBasic/100)
       const result = await updateDiaryInfo({
         owner,
         date,
-        productList: [{ productId, weight }],
+        productList: [{ _id, weight, title, calories }],
       });
       res.status(201).json(result);
     } else {
       productList = diaryInfo?.productList ?? [];
-      console.log(productList);
-      const indexProduct = productList.findIndex((el) =>
-        el.productId.toString() === productId.toString()
+      const indexProduct = productList.findIndex(
+        (el) => el._id.toString() === _id.toString()
       );
-      console.log(indexProduct);
       if (indexProduct === -1) {
-        productList = [...productList, { productId, weight }];
+        const calories = Math.round(weight*caloriesBasic /100)
+        productList = [...productList, { _id, weight, title, calories }];
       } else {
+       
         productList[indexProduct].weight =
           productList[indexProduct].weight + weight ?? weight;
+          productList[indexProduct].calories = Math.round(productList[indexProduct].weight*caloriesBasic/100 ) 
       }
 
       const result = await updateDiaryInfo({ owner, date, productList });
