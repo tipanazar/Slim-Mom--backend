@@ -58,7 +58,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
       verificationToken: null,
       verify: true,
     });
-    res.json({
+    res.status(200).json({
       message: "Підтвердження успішне",
     });
   } catch (error) {
@@ -149,7 +149,7 @@ router.get("/logout", auth, async (req, res, next) => {
   try {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: null });
-    res.status(200).json();
+    res.status(204).json();
   } catch (err) {
     next();
   }

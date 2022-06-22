@@ -25,7 +25,7 @@ router.post("/bloodtype/:bloodType", async (req, res, next) => {
       products: [...products].splice(0, 10),
       calories,
     };
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -64,7 +64,7 @@ router.post("/user/bloodtype/:bloodType", auth, async (req, res, next) => {
       products: [...notAllowedProducts],
       calories,
     };
-    res.json(response);
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
