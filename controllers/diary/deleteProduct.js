@@ -17,9 +17,8 @@ const deleteProduct = async (req, res, next) => {
     );
 
     const result = await updateDiaryInfo({ owner, date, productList });
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
