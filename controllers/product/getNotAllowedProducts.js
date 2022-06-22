@@ -1,4 +1,4 @@
-const { Product } = require("../../models/Product");
+const { Product, schemas } = require("../../models/Product");
 const { createError, calculateCalories } = require("../../helpers");
 
 const getNotAllowedProducts = async (req, res, next) => {
