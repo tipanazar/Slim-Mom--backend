@@ -1,29 +1,30 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+
 const productSchema = Schema({
   categories: {
     type: Array,
-    required: true,
   },
   weight: {
-    type: String,
-    required: true,
+    type: Number,
   },
-  title: {
-    type: Object,
-    required: true,
-  },
+  title: Schema({
+    ru: {type : String,
+        index: true
+    },
+    ua: {type : String,
+        index: true
+    }
+  }),
   calories: {
-    type: String,
-    required: true,
+    type: Number,
   },
   groupBloodNotAllowed: {
     type: Array,
-    required: true,
   },
-});
-
+})
+    
 const getDataForBMR = Joi.object({
   height: Joi.string().required(),
   age: Joi.string().required(),
