@@ -3,8 +3,6 @@ const { Product, schemas } = require("../../models/Product");
 const { User } = require("../../models/User");
 const { createError, calculateCalories } = require("../../helpers");
 
-
-
 const postNotAllowedProducts = async (req, res, next) => {
   try {
     const { error } = schemas.getDataForBMR.validate(req.body);

@@ -6,7 +6,6 @@ const { createError } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
 const auth = async (req, res, next) => {
-  
   try {
     const { authorization } = req.headers;
     if (!authorization) {
@@ -23,14 +22,13 @@ const auth = async (req, res, next) => {
       if (!user || user.token !== token) {
         throw createError(401);
       }
-      
+
       req.user = user;
       next();
     } catch (err) {
       throw createError(401);
     }
   } catch (err) {
-    
     next(err);
   }
 };

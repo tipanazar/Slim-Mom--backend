@@ -20,7 +20,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/diary", diaryRouter);
 app.use("/api/auth", authRouter);
 
-app.use('/api/products', productsRouter)
+app.use("/api/products", productsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });

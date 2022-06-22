@@ -1,4 +1,4 @@
-const {Diary} = require("../../models/Diary");
+const { Diary } = require("../../models/Diary");
 const { createError } = require("../../helpers");
 const { getProductsListbyId } = require("../product");
 
@@ -9,12 +9,13 @@ const updateDiaryInfo = async ({ owner, date, productList = [] }) => {
     if (productList?.length) {
       const productFullInfoList = await getProductsListbyId(
         productList.map(({ _id }) => _id)
-      );     
+      );
       if (productFullInfoList?.length) {
         for (let index = 0; index < productFullInfoList.length; index++) {
           const weight =
             productList.find(
-              ({_id }) => _id.toString() === productFullInfoList[index]._id.toString() 
+              ({ _id }) =>
+                _id.toString() === productFullInfoList[index]._id.toString()
             )?.weight ?? 0;
 
           const caloriesCalc = Math.round(
@@ -32,11 +33,11 @@ const updateDiaryInfo = async ({ owner, date, productList = [] }) => {
       { date, owner },
       { $set: { productList, caloriesReceived, owner, date } },
       { new: true, upsert: true }
-    );  
+    );
     if (!result) {
       throw createError(404);
     }
-    return result
+    return result;
   } catch (error) {
     return createError(404);
   }

@@ -1,10 +1,10 @@
-const {Product} = require("../../models/Product");
+const { Product } = require("../../models/Product");
 const { createError } = require("../../helpers");
 
-const getProductsListbyId = async (productListId=[]) => {
-  try {      
-    const result = await Product.find({ _id:{$in:productListId}});
-    
+const getProductsListbyId = async (productListId = []) => {
+  try {
+    const result = await Product.find({ _id: { $in: productListId } });
+
     if (!result) {
       throw createError(404);
     }

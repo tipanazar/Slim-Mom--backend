@@ -17,7 +17,6 @@ router.post("/register", async (req, res, next) => {
       throw createError(400, error.message);
     }
     const { name, email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (user) {
       throw createError(
@@ -25,19 +24,15 @@ router.post("/register", async (req, res, next) => {
         `Користувач з електронною поштою ${email} вже існує`
       );
     }
-
     const hashPass = await bcrypt.hash(password, 10);
     const verificationToken = nanoid();
-
     const result = await User.create({
       name,
       email,
       password: hashPass,
       verificationToken,
     });
-
     await sendEmail(msg(email, verificationToken));
-
     res.status(201).json({
       name: result.name,
     });
