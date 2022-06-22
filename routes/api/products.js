@@ -6,7 +6,7 @@ const ctrl = require("../../controllers/product");
 
 router.get("/search/:searchQuerry", ctrl.searchProducts);
 
-router.get("/bloodtype/:bloodType", ctrl.getNotAllowedProducts);
+router.post("/bloodtype/:bloodType", ctrl.getNotAllowedProducts);
 
 router.post("/user/bloodtype/:bloodType", auth, ctrl.getNotAllowedProducts);
 

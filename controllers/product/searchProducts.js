@@ -10,12 +10,11 @@ const searchProducts = async (req, res, next) => {
       { "title.ua": { $regex: searchQuerry } }
     );
 
-    if (!result) {
+    if (!result.length) {
       throw createError(404);
     }
     res.json(result);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

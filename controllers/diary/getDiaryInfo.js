@@ -2,7 +2,7 @@ const { Diary } = require("../../models/Diary");
 const getProductsListbyId = require("../product/getProductsListbyId");
 const { createError } = require("../../helpers");
 const e = require("express");
-
+ 
 const getDiaryInfo = async (req, res, next) => {
   try {
     const date = req.params.date;
