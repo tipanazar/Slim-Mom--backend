@@ -13,7 +13,7 @@ const getDiaryInfo = async (req, res, next) => {
       throw createError(404);
     }
 
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     console.log(error);
     next(error);
