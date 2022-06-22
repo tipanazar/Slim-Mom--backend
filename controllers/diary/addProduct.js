@@ -1,4 +1,5 @@
 const { Types } = require("mongoose");
+
 const { Diary } = require("../../models/Diary");
 const { Product } = require("../../models/Product");
 const updateDiaryInfo = require("./updateDiaryInfo");
@@ -14,7 +15,7 @@ const addProduct = async (req, res, next) => {
     const diaryInfo = await Diary.findOne({ date, owner });
 
     if (!diaryInfo) {
-        const calories = Math.round(weight*caloriesBasic/100)
+      const calories = Math.round((weight * caloriesBasic) / 100);
       const result = await updateDiaryInfo({
         owner,
         date,
@@ -27,13 +28,14 @@ const addProduct = async (req, res, next) => {
         (el) => el._id.toString() === _id.toString()
       );
       if (indexProduct === -1) {
-        const calories = Math.round(weight*caloriesBasic /100)
+        const calories = Math.round((weight * caloriesBasic) / 100);
         productList = [...productList, { _id, weight, title, calories }];
       } else {
-       
         productList[indexProduct].weight =
           productList[indexProduct].weight + weight ?? weight;
-          productList[indexProduct].calories = Math.round(productList[indexProduct].weight*caloriesBasic/100 ) 
+        productList[indexProduct].calories = Math.round(
+          (productList[indexProduct].weight * caloriesBasic) / 100
+        );
       }
 
       const result = await updateDiaryInfo({ owner, date, productList });

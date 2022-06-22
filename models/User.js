@@ -32,17 +32,17 @@ const userSchema = Schema(
     parameters: {
       type: Object,
       default: {
-        "age": "0",
-        "height": "0",
-        "currentWeight": "0",
-        "desiredWeight": "0",
-        "bloodType": "1",
-        "calories": "0"
-    }
+        age: "0",
+        height: "0",
+        currentWeight: "0",
+        desiredWeight: "0",
+        bloodType: "1",
+        calories: "0",
+      },
     },
-    notAllowedProducts:{
+    notAllowedProducts: {
       type: Array,
-      default: []
+      default: [],
     },
     verify: {
       type: Boolean,
