@@ -39,6 +39,9 @@ const addProduct = async (req, res, next) => {
       }
 
       const result = await updateDiaryInfo({ owner, date, productList });
+      if(result.status === 404) {
+        throw createError(404)
+      }
       res.status(201).json(result);
     }
   } catch (error) {
