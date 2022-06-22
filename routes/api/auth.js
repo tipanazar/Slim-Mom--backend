@@ -17,7 +17,6 @@ router.post("/register", async (req, res, next) => {
       throw createError(400, error.message);
     }
     const { name, email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (user) {
       throw createError(
@@ -25,19 +24,15 @@ router.post("/register", async (req, res, next) => {
         `Користувач з електронною поштою ${email} вже існує`
       );
     }
-
     const hashPass = await bcrypt.hash(password, 10);
     const verificationToken = nanoid();
-
     const result = await User.create({
       name,
       email,
       password: hashPass,
       verificationToken,
     });
-
     await sendEmail(msg(email, verificationToken));
-
     res.status(201).json({
       name: result.name,
     });
@@ -58,7 +53,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
       verificationToken: null,
       verify: true,
     });
-    res.json({
+    res.status(200).json({
       message: "Підтвердження успішне",
     });
   } catch (error) {
@@ -78,7 +73,7 @@ router.post("/verify", async (req, res, next) => {
       throw createError(404, "Такого Email не знайдено");
     }
     if (user.verify) {
-      throw createError(400, "Електронна пошта вже перевірена");
+      throw createError(409, "Електронна пошта вже перевірена");
     }
 
     const { verificationToken } = user;
@@ -111,7 +106,7 @@ router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     const result = await User.findOne({ email });
     if (!result) {
-      throw createError(401, "Користувача з таким Email не знайдено");
+      throw createError(404, "Користувача з таким Email не знайдено");
     }
     const passwordCompare = await bcrypt.compare(password, result.password);
     if (!passwordCompare) {
@@ -149,7 +144,7 @@ router.get("/logout", auth, async (req, res, next) => {
   try {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: null });
-    res.status(200).json();
+    res.status(204).json();
   } catch (err) {
     next();
   }
