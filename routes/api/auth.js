@@ -138,8 +138,8 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/user", auth, async (req, res, next) => {
   try {
-    const { name } = req.user;
-    res.json({ name });
+    const { name, notAllowedProducts, parameters } = req.user;
+    res.json({ name, notAllowedProducts, parameters });
   } catch (error) {
     next(error);
   }
