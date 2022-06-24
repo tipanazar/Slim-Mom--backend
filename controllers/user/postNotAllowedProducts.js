@@ -1,4 +1,3 @@
-const { auth } = require("../../middlewares");
 const { Product, schemas } = require("../../models/Product");
 const { User } = require("../../models/User");
 const { createError, calculateCalories } = require("../../helpers");

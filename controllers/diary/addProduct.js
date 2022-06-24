@@ -1,7 +1,4 @@
-const { Types } = require("mongoose");
-
 const { Diary } = require("../../models/Diary");
-const { Product } = require("../../models/Product");
 const updateDiaryInfo = require("./updateDiaryInfo");
 const { createError } = require("../../helpers");
 
